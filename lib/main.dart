@@ -18,8 +18,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const InicioPage(title: 'Tela Inicial'),
-        '/dados': (context) => const DadosContatoPage(title: 'Informações de Contato'),
+        '/': (context) => const InicioPage(title: 'Bem Vindo ao DenTeeth'),
+        '/dados': (context) =>
+            const DadosContatoPage(title: 'Informações de Contato'),
       },
     );
   }
