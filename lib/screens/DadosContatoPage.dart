@@ -23,12 +23,14 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
       _motivo = "Motivo não informado";
     }
 
-    final result = await FirebaseFunctions.instance
-        .httpsCallable('EnviarChamadaEmergencia')
-        .call(
-      {"nome": _nome, "telefone": _telefone, "motivo": _motivo},
-    );
-    _response = result.data as String;
+    await FirebaseFunctions.instanceFor(region: 'southamerica-east1')
+        .httpsCallable('enviarEmergencia')
+        .call({
+      "nome": _nome,
+      "telefone": _telefone,
+      "descricao": _motivo,
+      "fotos": '',
+    });
   }
 
   @override
@@ -107,7 +109,12 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
             ),
             Text('Nome: $_nome | Telefone: $_telefone | Motivo: $_motivo'),
             ElevatedButton(
-                onPressed: () {}, child: const Text('Pedir socorro imediato')),
+                onPressed: () {
+                  pedirsocorro();
+
+                  Navigator.pushNamed(context, '/lista_aprovados');
+                },
+                child: const Text('Pedir socorro imediato')),
           ],
         ),
       )),
