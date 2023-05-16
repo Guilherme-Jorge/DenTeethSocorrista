@@ -1,5 +1,6 @@
 import 'package:denteeth/screens/InicioPage.dart';
 import 'package:denteeth/screens/DadosContatoPage.dart';
+import 'package:denteeth/screens/ListaAprovados.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -28,6 +29,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const InicioPage(title: 'Bem Vindo ao DenTeeth'),
         '/dados': (context) =>
             const DadosContatoPage(title: 'Informações de Contato'),
+        '/lista_aprovados': (context) =>
+            const ListaAprovados(title: 'Lista dos Aprovados'),
       },
     );
   }
