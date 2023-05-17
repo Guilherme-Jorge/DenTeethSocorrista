@@ -30,7 +30,7 @@ class _InicioPageState extends State<InicioPage> {
                     const EdgeInsets.symmetric(horizontal: 100, vertical: 14)),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/dados');
+                Navigator.pushNamed(context, '/camera_boca');
               },
               child: const Text(
                 'Emergência',

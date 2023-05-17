@@ -107,11 +107,9 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
                 ),
               ],
             ),
-            Text('Nome: $_nome | Telefone: $_telefone | Motivo: $_motivo'),
             ElevatedButton(
                 onPressed: () {
                   pedirsocorro();
-
                   Navigator.pushNamed(context, '/lista_aprovados');
                 },
                 child: const Text('Pedir socorro imediato')),
