@@ -1,10 +1,10 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/files.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+
+import 'DadosContatoPage.dart';
 
 class TakePictureScreen extends StatefulWidget {
   const TakePictureScreen({
@@ -94,7 +94,7 @@ class DisplayPictureScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.file(File(imagePath)),
+              Expanded(child: Image.file(File(imagePath))),
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -107,7 +107,8 @@ class DisplayPictureScreen extends StatelessWidget {
                     const SizedBox(width: 24),
                     ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/dados');
+                          Navigator.pushNamed(context, '/dados',
+                              arguments: ScreenArguments(imagePath));
                         },
                         child: const Text('Próximo')),
                   ])
