@@ -12,11 +12,17 @@ dependencies:
   flutter:
     sdk: flutter
 
-
+  uuid: ^3.0.6
   cupertino_icons: ^1.0.2
   firebase_core: ^2.12.0
   cloud_functions: ^4.3.0
   firebase_storage: ^11.2.0
+  camera:
+  gallery_saver: ^2.3.2
+  path_provider:
+  path:
+
+
 
 dev_dependencies:
   flutter_test:
