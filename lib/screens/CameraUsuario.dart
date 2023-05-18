@@ -66,6 +66,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
               MaterialPageRoute(
                 builder: (context) => DisplayPictureScreen(
                   imagePath: image.path,
+                  controllerCamera: _controller,
                 ),
               ),
             );
@@ -81,8 +82,10 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
+  final CameraController controllerCamera;
 
-  const DisplayPictureScreen({super.key, required this.imagePath});
+  const DisplayPictureScreen(
+      {super.key, required this.imagePath, required this.controllerCamera});
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +109,11 @@ class DisplayPictureScreen extends StatelessWidget {
                         child: const Text('Voltar')),
                     const SizedBox(width: 24),
                     ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.pushNamed(context, '/dados',
                               arguments: ScreenArguments(imagePath));
+
+                          await controllerCamera.pausePreview();
                         },
                         child: const Text('Próximo')),
                   ])
