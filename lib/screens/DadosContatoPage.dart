@@ -1,9 +1,14 @@
+import 'dart:ffi';
 import 'dart:io';
+
+import 'package:uuid/uuid.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+
+var uuid = const Uuid();
 
 class ScreenArguments {
   final String image;
@@ -25,7 +30,7 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
   String _telefone = "";
   String _motivo = "";
 
-  void pedirsocorro(String imagePath) async {
+  Future<bool> pedirsocorro(String imagePath) async {
     if (_motivo.isEmpty) {
       _motivo = "Motivo não informado";
     }
@@ -33,8 +38,7 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
     File imageFile = File(imagePath);
 
     final storageRef = FirebaseStorage.instance.ref();
-
-    final mountainsRef = storageRef.child("foto-boca.jpg");
+    final mountainsRef = storageRef.child('${uuid.v1()}-foto-boca');
 
     await mountainsRef.putFile(imageFile);
 
@@ -48,6 +52,8 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
       "descricao": _motivo,
       "fotos": imageUrl,
     });
+
+    return true;
   }
 
   @override
@@ -128,8 +134,8 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  pedirsocorro(args.image);
-                  Navigator.pushNamed(context, '/lista_aprovados');
+                  pedirsocorro(args.image).then((value) =>
+                      Navigator.pushNamed(context, '/lista_aprovados'));
                 },
                 child: const Text('Pedir socorro imediato')),
           ],
