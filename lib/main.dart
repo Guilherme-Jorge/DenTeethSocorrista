@@ -2,7 +2,9 @@ import 'package:denteeth/screens/CameraUsuario.dart';
 import 'package:denteeth/screens/InicioPage.dart';
 import 'package:denteeth/screens/DadosContatoPage.dart';
 import 'package:denteeth/screens/ListaAprovados.dart';
+import 'package:denteeth/screens/Telefone.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,6 +43,8 @@ class MyApp extends StatelessWidget {
         '/lista_aprovados': (context) =>
             const ListaAprovados(title: 'Lista dos Aprovados'),
         '/camera_boca': (context) => TakePictureScreen(camera: camera)
+        //'/Telefone': (context) =>
+        //const Telefone(title: 'Telefone'),
       },
     );
   }
