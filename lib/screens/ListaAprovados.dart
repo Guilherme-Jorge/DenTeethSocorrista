@@ -1,5 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
+class ScreenArgumentsIdEmergencia {
+  final String emergeId;
+
+  ScreenArgumentsIdEmergencia(this.emergeId);
+}
 
 class ListaAprovados extends StatefulWidget {
   const ListaAprovados({super.key, required this.title});
@@ -11,20 +18,26 @@ class ListaAprovados extends StatefulWidget {
 }
 
 class _ListaAprovadosState extends State<ListaAprovados> {
-  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
-      .collection('respostas')
-      .where('status', isEqualTo: 'ACEITA')
-      .snapshots();
-
   @override
   Widget build(BuildContext context) {
+    //final args = ModalRoute.of(context)!.settings.arguments
+    //as ScreenArgumentsIdEmergencia;
+    final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
+        .collection('respostas')
+        .where('emergencia', isEqualTo: "ZpMC1CQ9soK8ir8Eqgvv")
+        .where('status', isEqualTo: 'ACEITA')
+        .limit(5)
+        .snapshots();
+
+    //print(args.emergeId);
+
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
           automaticallyImplyLeading: false,
         ),
         body: Column(children: [
-          const Text('Texto aqui'),
+          const SizedBox(height: 30),
           StreamBuilder(
               stream: _usersStream,
               builder: (BuildContext context,
@@ -37,33 +50,55 @@ class _ListaAprovadosState extends State<ListaAprovados> {
                   return const Text("Loading");
                 }
 
-                return Expanded(
-                  child: ListView(
-                    children: snapshot.data!.docs
-                        .map((DocumentSnapshot document) {
-                          Map<String, dynamic> data =
-                              document.data()! as Map<String, dynamic>;
-                          return Card(
-                            child: ListTile(
-                              tileColor: Colors.blueAccent,
-                              textColor: Colors.white,
-                              iconColor: Colors.redAccent,
-                              title: Text(data['dataHora']),
-                              trailing: IconButton(
-                                  onPressed: () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text('Nome apagado')),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.delete)),
-                            ),
-                          );
-                        })
-                        .toList()
-                        .cast(),
-                  ),
-                );
+                if (snapshot.data!.docs.isNotEmpty) {
+                  return Expanded(
+                    child: ListView(
+                      children: snapshot.data!.docs
+                          .map((DocumentSnapshot document) {
+                            Map<String, dynamic> data =
+                                document.data()! as Map<String, dynamic>;
+
+                            return Card(
+                              color: Colors.blue,
+                              child: Row(
+                                children: [
+                                  Image.network(
+                                    data['avatar'],
+                                    height: 130.0,
+                                  ),
+                                  const SizedBox(width: 40.0),
+                                  Text(
+                                    data['nome'],
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 26),
+                                  ),
+                                  TextButton(
+                                      onPressed: () {},
+                                      child: const Icon(
+                                        Icons.done,
+                                        color: Colors.greenAccent,
+                                        size: 40,
+                                      )),
+                                  TextButton(
+                                      onPressed: () {},
+                                      child: const Icon(
+                                        Icons.highlight_off,
+                                        color: Colors.redAccent,
+                                        size: 40,
+                                      ))
+                                ],
+                              ),
+                            );
+                          })
+                          .toList()
+                          .cast(),
+                    ),
+                  );
+                }
+
+                return Text('Aguardando aprovação dos dentistas solicitados!');
               }),
         ]));
   }
