@@ -1,40 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() {
-  runApp(MyApp());
+class ScreenArgumentsTelefone {
+  final String telefone;
+
+  ScreenArgumentsTelefone(this.telefone);
 }
 
-class MyApp extends StatelessWidget {
+class Telefone extends StatefulWidget {
+  const Telefone({super.key, required this.title});
+
+  final String title;
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'AceitoContato',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Telefone(),
-    );
-  }
+  State<Telefone> createState() => _Telefone();
 }
 
-class Telefone extends StatelessWidget {
-
-  // usar essa string para passar o telefone na tela
-  String Ntelefone = "199993213";
-
+class _Telefone extends State<Telefone> {
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as ScreenArgumentsTelefone;
+    String telefone = args.telefone;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('AceitoContato'),
+        title: const Text('Contato Aceito'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('images/upvotepana1.png'),
-            SizedBox(height: 20), // espaco da img com o botao
+            Image.asset('images/telefone.png'),
+            const SizedBox(height: 20), // espaco da img com o botao
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -42,36 +40,35 @@ class Telefone extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {},
                     child: Text(
-                      '$Ntelefone',
-                      style: TextStyle(fontSize: 18),
+                      telefone,
+                      style: const TextStyle(fontSize: 18),
                     ),
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   IconButton(
                     icon: const Icon(Icons.copy),
                     onPressed: () {
-                      Clipboard.setData(ClipboardData(text: Ntelefone));
+                      Clipboard.setData(ClipboardData(text: telefone));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Número copiado.')),
+                      );
                     },
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 20), // espaco da img com o botao
+            const SizedBox(height: 20), // espaco da img com o botao
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-
-                  },
-                  child: Text('Cancelar'),
+                  onPressed: () {},
+                  child: const Text('Cancelar'),
                 ),
-                SizedBox(width: 25), // espaco dos botoes
+                const SizedBox(width: 25), // espaco dos botoes
                 ElevatedButton(
-                  onPressed: () {
-
-                  },
-                  child: Text('Enviar Localização'),
+                  onPressed: () {},
+                  child: const Text('Enviar Localização'),
                 ),
               ],
             ),

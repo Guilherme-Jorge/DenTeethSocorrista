@@ -42,9 +42,8 @@ class MyApp extends StatelessWidget {
             const DadosContatoPage(title: 'Informações de Contato'),
         '/lista_aprovados': (context) =>
             const ListaAprovados(title: 'Lista dos Aprovados'),
-        '/camera_boca': (context) => TakePictureScreen(camera: camera)
-        //'/Telefone': (context) =>
-        //const Telefone(title: 'Telefone'),
+        '/camera_boca': (context) => TakePictureScreen(camera: camera),
+        '/telefone': (context) => const Telefone(title: 'Telefone'),
       },
     );
   }
