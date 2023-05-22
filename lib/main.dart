@@ -2,7 +2,9 @@ import 'package:denteeth/screens/CameraUsuario.dart';
 import 'package:denteeth/screens/InicioPage.dart';
 import 'package:denteeth/screens/DadosContatoPage.dart';
 import 'package:denteeth/screens/ListaAprovados.dart';
+import 'package:denteeth/screens/Telefone.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,14 +13,14 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   final cameras = await availableCameras();
   final firstCamera = cameras.first;
 
   runApp(MyApp(camera: firstCamera));
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 }
 
 class MyApp extends StatelessWidget {
@@ -40,7 +42,8 @@ class MyApp extends StatelessWidget {
             const DadosContatoPage(title: 'Informações de Contato'),
         '/lista_aprovados': (context) =>
             const ListaAprovados(title: 'Lista dos Aprovados'),
-        '/camera_boca': (context) => TakePictureScreen(camera: camera)
+        '/camera_boca': (context) => TakePictureScreen(camera: camera),
+        '/telefone': (context) => const Telefone(title: 'Telefone'),
       },
     );
   }

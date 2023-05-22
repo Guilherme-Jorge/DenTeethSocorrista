@@ -17,6 +17,7 @@ dependencies:
   firebase_core: ^2.12.0
   cloud_functions: ^4.3.0
   firebase_storage: ^11.2.0
+  cloud_firestore: ^4.7.0
   camera:
   gallery_saver: ^2.3.2
   path_provider:
@@ -36,4 +37,5 @@ flutter:
 
   assets:
     - images/telaInicio.png
+    - images/telefone.png
 

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
@@ -7,6 +8,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+
+import 'ListaAprovados.dart';
 
 var uuid = const Uuid();
 
@@ -30,7 +33,7 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
   String _telefone = "";
   String _motivo = "";
 
-  Future<bool> pedirsocorro(String imagePath) async {
+  Future<String> pedirsocorro(String imagePath) async {
     if (_motivo.isEmpty) {
       _motivo = "Motivo não informado";
     }
@@ -44,16 +47,21 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
 
     String imageUrl = await mountainsRef.getDownloadURL();
 
-    await FirebaseFunctions.instanceFor(region: 'southamerica-east1')
-        .httpsCallable('enviarEmergencia')
-        .call({
+    final result =
+        await FirebaseFunctions.instanceFor(region: 'southamerica-east1')
+            .httpsCallable('enviarEmergencia')
+            .call({
       "nome": _nome,
       "telefone": _telefone,
       "descricao": _motivo,
       "fotos": imageUrl,
     });
 
-    return true;
+    String response = result.data as String;
+    Map<dynamic, dynamic> userData = json.decode(response);
+    Map<dynamic, dynamic> userPayload = json.decode(userData['payload']);
+
+    return userPayload['docId'] as String;
   }
 
   @override
@@ -134,8 +142,10 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  pedirsocorro(args.image).then((value) =>
-                      Navigator.pushNamed(context, '/lista_aprovados'));
+                  pedirsocorro(args.image).then((value) => {
+                        Navigator.pushNamed(context, '/lista_aprovados',
+                            arguments: ScreenArgumentsIdEmergencia(value))
+                      });
                 },
                 child: const Text('Pedir socorro imediato')),
           ],
