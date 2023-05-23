@@ -97,25 +97,37 @@ class DisplayPictureScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(child: Image.file(File(imagePath))),
+              SizedBox(height: 530, child: Image.file(File(imagePath))),
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ElevatedButton(
+                    TextButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('Voltar')),
-                    const SizedBox(width: 24),
+                        child: Row(
+                          children: const [
+                            Icon(Icons.repeat_rounded, color: Colors.black54),
+                            SizedBox(width: 6),
+                            Text(
+                              'Refazer foto',
+                              style: TextStyle(color: Colors.black54),
+                            )
+                          ],
+                        )),
+                    const SizedBox(width: 40),
                     ElevatedButton(
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                                const EdgeInsets.fromLTRB(20, 0, 20, 0))),
                         onPressed: () async {
                           Navigator.pushNamed(context, '/dados',
                               arguments: ScreenArguments(imagePath));
 
                           await controllerCamera.pausePreview();
                         },
-                        child: const Text('Próximo')),
+                        child: const Text('Próximo passo')),
                   ])
             ]));
   }

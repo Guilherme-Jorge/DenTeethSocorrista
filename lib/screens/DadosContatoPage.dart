@@ -93,13 +93,15 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
                     labelStyle: TextStyle(
                       color: Colors.black,
                     ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: BorderSide(color: Colors.black38),
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 25,
                 ),
                 TextFormField(
                   onChanged: (value) {
@@ -107,47 +109,59 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
                       _telefone = value;
                     });
                   },
-                  maxLength: 20,
+                  maxLength: 15,
                   decoration: const InputDecoration(
                     labelText: 'Telefone de contato *',
                     labelStyle: TextStyle(
                       color: Colors.black,
                     ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: BorderSide(color: Colors.black38),
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 25,
                 ),
                 TextFormField(
+                  maxLines: 3,
+                  minLines: 1,
                   onChanged: (value) {
                     setState(() {
                       _motivo = value;
                     });
                   },
-                  maxLength: 50,
+                  maxLength: 100,
                   decoration: const InputDecoration(
                     labelText: 'Qual o motivo da emergência? (Opcional)',
                     labelStyle: TextStyle(
                       color: Colors.black,
                     ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: BorderSide(color: Colors.black38),
                     ),
                   ),
                 ),
               ],
             ),
             ElevatedButton(
+                style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.fromLTRB(46, 12, 46, 12))),
                 onPressed: () {
                   pedirsocorro(args.image).then((value) => {
                         Navigator.pushNamed(context, '/lista_aprovados',
                             arguments: ScreenArgumentsIdEmergencia(value))
                       });
                 },
-                child: const Text('Pedir socorro imediato')),
+                child: const Text(
+                  'Pedir socorro imediato',
+                  style: TextStyle(fontSize: 18),
+                )),
           ],
         ),
       )),
