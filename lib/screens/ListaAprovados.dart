@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:denteeth/screens/Telefone.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,14 @@ class _ListaAprovadosState extends State<ListaAprovados> {
                                   ),
                                   TextButton(
                                       onPressed: () {
+                                        FirebaseFunctions.instanceFor(
+                                                region: 'southamerica-east1')
+                                            .httpsCallable(
+                                                'notificarProfissional')
+                                            .call({
+                                          "profissional": data['profissional']
+                                        });
+
                                         Navigator.pushNamed(
                                             context, '/telefone',
                                             arguments: ScreenArgumentsTelefone(
