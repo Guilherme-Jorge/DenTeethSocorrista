@@ -3,6 +3,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:denteeth/screens/Telefone.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ScreenArgumentsIdEmergencia {
   final String emergeId;
@@ -32,147 +33,176 @@ class _ListaAprovadosState extends State<ListaAprovados> {
         .snapshots();
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          automaticallyImplyLeading: false,
-        ),
-        body: Column(children: [
-          const SizedBox(height: 30),
-          StreamBuilder(
-              stream: _usersStream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return const Text('Something went wrong');
-                }
+      appBar: AppBar(
+        title: Text(widget.title),
+        automaticallyImplyLeading: false,
+      ),
+      body: StreamBuilder(
+          stream: _usersStream,
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return const Text('Something went wrong');
+            }
 
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text("Loading");
-                }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text("Loading");
+            }
 
-                if (snapshot.data!.docs.isNotEmpty) {
-                  return Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
-                      children: snapshot.data!.docs
-                          .map((DocumentSnapshot document) {
-                            Map<String, dynamic> data =
-                                document.data()! as Map<String, dynamic>;
+            if (snapshot.data!.docs.isNotEmpty) {
+              return Column(children: [
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
+                    children: snapshot.data!.docs
+                        .map((DocumentSnapshot document) {
+                          Map<String, dynamic> data =
+                              document.data()! as Map<String, dynamic>;
 
-                            return Container(
-                              margin: const EdgeInsetsDirectional.fromSTEB(
-                                  0, 6, 0, 6),
-                              height: 110,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 2, color: Colors.black12),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(4))),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              data['nome'],
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20),
-                                            ),
-                                            const SizedBox(height: 5),
-                                            const Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.star,
-                                                  color: Colors.blue,
-                                                ),
-                                                Icon(
-                                                  Icons.star,
-                                                  color: Colors.blue,
-                                                ),
-                                                Icon(
-                                                  Icons.star,
-                                                  color: Colors.blue,
-                                                ),
-                                                Icon(
-                                                  Icons.star_half,
-                                                  color: Colors.blue,
-                                                ),
-                                                Icon(
-                                                  Icons.star_border,
-                                                  color: Colors.blue,
-                                                )
-                                              ],
-                                            )
-                                          ]),
-                                      const Row(
+                          return Container(
+                            margin: const EdgeInsetsDirectional.fromSTEB(
+                                0, 6, 0, 6),
+                            height: 110,
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(width: 2, color: Colors.black12),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(4))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '20 km ',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                            data['nome'],
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
                                           ),
-                                          Text(
-                                            'da sua localização',
-                                            style:
-                                                TextStyle(color: Colors.grey),
+                                          const SizedBox(height: 5),
+                                          const Row(
+                                            children: [
+                                              Icon(
+                                                Icons.star,
+                                                color: Colors.blue,
+                                              ),
+                                              Icon(
+                                                Icons.star,
+                                                color: Colors.blue,
+                                              ),
+                                              Icon(
+                                                Icons.star,
+                                                color: Colors.blue,
+                                              ),
+                                              Icon(
+                                                Icons.star_half,
+                                                color: Colors.blue,
+                                              ),
+                                              Icon(
+                                                Icons.star_border,
+                                                color: Colors.blue,
+                                              )
+                                            ],
                                           )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  TextButton(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.black),
-                                        padding: MaterialStateProperty.all(
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 2.0)),
-                                      ),
-                                      onPressed: () {
-                                        FirebaseFunctions.instanceFor(
-                                                region: 'southamerica-east1')
-                                            .httpsCallable(
-                                                'notificarProfissional')
-                                            .call({
-                                          "profissional": data['profissional']
-                                        });
+                                        ]),
+                                    const Row(
+                                      children: [
+                                        Text(
+                                          '20 km ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          'da sua localização',
+                                          style: TextStyle(color: Colors.grey),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                TextButton(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.black),
+                                      padding: MaterialStateProperty.all(
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 10.0, vertical: 2.0)),
+                                    ),
+                                    onPressed: () {
+                                      FirebaseFunctions.instanceFor(
+                                              region: 'southamerica-east1')
+                                          .httpsCallable(
+                                              'notificarProfissional')
+                                          .call({
+                                        "profissional": data['profissional']
+                                      });
 
-                                        Navigator.pushNamed(
-                                            context, '/telefone',
-                                            arguments: ScreenArgumentsTelefone(
-                                                data['telefone']));
-                                      },
-                                      child: const Text(
-                                        'Aceitar',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 12),
-                                      ))
-                                ],
-                              ),
-                            );
-                          })
-                          .toList()
-                          .cast(),
+                                      Navigator.pushNamed(context, '/telefone',
+                                          arguments: ScreenArgumentsTelefone(
+                                              data['telefone']));
+                                    },
+                                    child: const Text(
+                                      'Aceitar',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 12),
+                                    ))
+                              ],
+                            ),
+                          );
+                        })
+                        .toList()
+                        .cast(),
+                  ),
+                )
+              ]);
+            }
+
+            return Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                  const SizedBox(
+                    width: 240,
+                    height: 8,
+                    child: LinearProgressIndicator(
+                      backgroundColor: Colors.white,
+                      color: Colors.black,
                     ),
-                  );
-                }
-
-                return Text('Aguardando aprovação dos dentistas solicitados!');
-              }),
-        ]));
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Image(image: AssetImage('images/aguardando.png')),
+                  Text(
+                    'Procurando Profissionais',
+                    style: GoogleFonts.inter(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  SizedBox(
+                      width: 260,
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        'Estamos procurando profissionais perto de sua localização',
+                        style: GoogleFonts.inter(
+                            color: Colors.black38, fontSize: 16),
+                      ))
+                ]));
+          }),
+    );
   }
 }
