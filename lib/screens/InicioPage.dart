@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class InicioPage extends StatefulWidget {
   const InicioPage({super.key, required this.title});
@@ -14,37 +15,38 @@ class _InicioPageState extends State<InicioPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title, style: GoogleFonts.pacifico()),
       ),
       body: Center(
           child: Padding(
         padding: const EdgeInsets.fromLTRB(24.0, 0, 24.0, 0),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           const Image(image: AssetImage('images/telaInicio.png')),
-          const SizedBox(height: 26),
-          TextButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => Colors.blueAccent),
-                padding: MaterialStateProperty.all(
-                    const EdgeInsets.symmetric(horizontal: 100, vertical: 14)),
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/camera_boca');
-              },
-              child: const Text(
-                'Emergência',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              )),
+          const SizedBox(height: 100),
+          SizedBox(
+            width: double.infinity,
+            child: TextButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => Colors.blueAccent),
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.fromLTRB(0, 6, 0, 6))),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/camera_boca');
+                },
+                child: Text('Emergência',
+                    style: GoogleFonts.pacifico(
+                        textStyle: const TextStyle(
+                            color: Colors.white, fontSize: 24)))),
+          ),
           const SizedBox(height: 16),
-          const Text(
-            '* Ao fazer o pedido de emergência você está de acordo com os nossos termos de serviços',
-            style: TextStyle(fontSize: 12),
-            textAlign: TextAlign.center,
-          )
+          const SizedBox(
+              width: 300,
+              child: Text(
+                '* Ao fazer o pedido de emergência você está de acordo com os nossos termos de serviços',
+                style: TextStyle(fontSize: 12, color: Colors.black38),
+                textAlign: TextAlign.center,
+              ))
         ]),
       )),
     );

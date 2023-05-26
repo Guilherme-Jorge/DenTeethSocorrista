@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'ListaAprovados.dart';
 
@@ -32,6 +33,7 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
   String _nome = "";
   String _telefone = "";
   String _motivo = "";
+  bool enviandoDados = false;
 
   Future<String> pedirsocorro(String imagePath) async {
     if (_motivo.isEmpty) {
@@ -67,10 +69,9 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title, style: GoogleFonts.pacifico()),
       ),
       body: Center(
           child: Padding(
@@ -88,14 +89,12 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
                     });
                   },
                   maxLength: 20,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Nome do socorrista *',
-                    labelStyle: TextStyle(
-                      color: Colors.black,
-                    ),
-                    focusedBorder: OutlineInputBorder(
+                    labelStyle: GoogleFonts.inter(color: Colors.black),
+                    focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue)),
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black38),
                     ),
                   ),
@@ -110,14 +109,12 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
                     });
                   },
                   maxLength: 15,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Telefone de contato *',
-                    labelStyle: TextStyle(
-                      color: Colors.black,
-                    ),
-                    focusedBorder: OutlineInputBorder(
+                    labelStyle: GoogleFonts.inter(color: Colors.black),
+                    focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue)),
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black38),
                     ),
                   ),
@@ -134,34 +131,66 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
                     });
                   },
                   maxLength: 100,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Qual o motivo da emergência? (Opcional)',
-                    labelStyle: TextStyle(
-                      color: Colors.black,
-                    ),
-                    focusedBorder: OutlineInputBorder(
+                    labelStyle: GoogleFonts.inter(color: Colors.black),
+                    focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue)),
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black38),
                     ),
                   ),
                 ),
               ],
             ),
-            ElevatedButton(
-                style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                        const EdgeInsets.fromLTRB(46, 12, 46, 12))),
-                onPressed: () {
-                  pedirsocorro(args.image).then((value) => {
-                        Navigator.pushNamed(context, '/lista_aprovados',
-                            arguments: ScreenArgumentsIdEmergencia(value))
-                      });
-                },
-                child: const Text(
-                  'Pedir socorro imediato',
-                  style: TextStyle(fontSize: 18),
-                )),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.fromLTRB(46, 12, 46, 12))),
+                  onPressed: () {
+                    if (_nome.isNotEmpty && _telefone.isNotEmpty) {
+                      if (!enviandoDados) {
+                        setState(() {
+                          enviandoDados = true;
+                        });
+                        pedirsocorro(args.image).then((value) => {
+                              Navigator.pushNamed(context, '/lista_aprovados',
+                                  arguments: ScreenArgumentsIdEmergencia(value))
+                            });
+                      }
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SimpleDialog(
+                              children: [
+                                SimpleDialogOption(
+                                    child: Text(
+                                  'Você não preencheu todos os campos obrigatórios.',
+                                  style: GoogleFonts.inter(
+                                      color: Colors.redAccent,
+                                      fontWeight: FontWeight.bold),
+                                ))
+                              ],
+                            );
+                          });
+                    }
+                  },
+                  child: enviandoDados
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ))
+                      : Text(
+                          'Pedir socorro imediato',
+                          style: GoogleFonts.inter(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        )),
+            )
           ],
         ),
       )),

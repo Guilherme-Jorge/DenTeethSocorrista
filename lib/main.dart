@@ -33,13 +33,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DenTeeth Socorrista',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.white),
       initialRoute: '/',
       routes: {
         '/': (context) => const InicioPage(title: 'Bem Vindo ao DenTeeth'),
         '/dados': (context) =>
-            const DadosContatoPage(title: 'Informações de Contato'),
+            const DadosContatoPage(title: 'Insira as informações de contato'),
         '/lista_aprovados': (context) =>
             const ListaAprovados(title: 'Escolha um dos dentistas'),
         '/camera_boca': (context) => TakePictureScreen(camera: camera),
