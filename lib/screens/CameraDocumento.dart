@@ -1,14 +1,15 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:denteeth/screens/CameraBoca.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'DadosContatoPage.dart';
+import 'ListaAprovados.dart';
 
-class TakePictureScreen extends StatefulWidget {
-  const TakePictureScreen({
+class CameraDocumento extends StatefulWidget {
+  const CameraDocumento({
     super.key,
     required this.camera,
   });
@@ -16,10 +17,10 @@ class TakePictureScreen extends StatefulWidget {
   final CameraDescription camera;
 
   @override
-  TakePictureScreenState createState() => TakePictureScreenState();
+  CameraDocumentoState createState() => CameraDocumentoState();
 }
 
-class TakePictureScreenState extends State<TakePictureScreen> {
+class CameraDocumentoState extends State<CameraDocumento> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
 
@@ -42,10 +43,12 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as CameraArgs;
     return Scaffold(
       appBar: AppBar(
-          title: Text('Fotogafre a região acidentada',
-              style: GoogleFonts.pacifico())),
+          title:
+              Text('Documento do responsável', style: GoogleFonts.pacifico()),
+          automaticallyImplyLeading: false),
       body: Center(
           child: Padding(
               padding: const EdgeInsets.fromLTRB(24.0, 0, 24.0, 0),
@@ -56,13 +59,13 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          color: Colors.blue,
+                          color: Colors.grey,
                           width: 110,
                           height: 6,
                         ),
                         const SizedBox(width: 2),
                         Container(
-                          color: Colors.grey,
+                          color: Colors.blue,
                           width: 110,
                           height: 6,
                         ),
@@ -111,9 +114,10 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
                               await Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => DisplayPictureScreen(
+                                  builder: (context) => CameraDocumentoDisplay(
                                     imagePath: image.path,
                                     controllerCamera: _controller,
+                                    args: args,
                                   ),
                                 ),
                               );
@@ -133,12 +137,16 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   }
 }
 
-class DisplayPictureScreen extends StatelessWidget {
+class CameraDocumentoDisplay extends StatelessWidget {
   final String imagePath;
   final CameraController controllerCamera;
+  final CameraArgs args;
 
-  const DisplayPictureScreen(
-      {super.key, required this.imagePath, required this.controllerCamera});
+  const CameraDocumentoDisplay(
+      {super.key,
+      required this.imagePath,
+      required this.controllerCamera,
+      required this.args});
 
   @override
   Widget build(BuildContext context) {
@@ -177,10 +185,9 @@ class DisplayPictureScreen extends StatelessWidget {
                         padding: MaterialStateProperty.all(
                             const EdgeInsets.fromLTRB(20, 0, 20, 0))),
                     onPressed: () async {
-                      Navigator.pushNamed(context, '/dados',
-                          arguments: ScreenArguments(imagePath));
-
-                      await controllerCamera.pausePreview();
+                      args.imagesPath.add(imagePath);
+                      Navigator.pushNamed(context, '/camera_crianca',
+                          arguments: CameraArgs(args.imagesPath));
                     },
                     child: Text('Próximo passo', style: GoogleFonts.inter())),
               ])

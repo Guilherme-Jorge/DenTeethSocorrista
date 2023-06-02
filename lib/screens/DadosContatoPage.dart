@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:denteeth/screens/CameraBoca.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -13,12 +14,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'ListaAprovados.dart';
 
 var uuid = const Uuid();
-
-class ScreenArguments {
-  final String image;
-
-  ScreenArguments(this.image);
-}
 
 class DadosContatoPage extends StatefulWidget {
   const DadosContatoPage({super.key, required this.title});
@@ -68,10 +63,12 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    final args = ModalRoute.of(context)!.settings.arguments as CameraArgs;
+    print(args.imagesPath);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title, style: GoogleFonts.pacifico()),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
           child: Padding(
@@ -155,7 +152,7 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
                         setState(() {
                           enviandoDados = true;
                         });
-                        pedirsocorro(args.image).then((value) => {
+                        pedirsocorro(args.imagesPath[0]).then((value) => {
                               Navigator.pushNamed(context, '/lista_aprovados',
                                   arguments: ScreenArgumentsIdEmergencia(value))
                             });
