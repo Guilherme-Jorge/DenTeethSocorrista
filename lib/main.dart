@@ -1,4 +1,6 @@
-import 'package:denteeth/screens/CameraUsuario.dart';
+import 'package:denteeth/screens/CameraBoca.dart';
+import 'package:denteeth/screens/CameraCrianca.dart';
+import 'package:denteeth/screens/CameraDocumento.dart';
 import 'package:denteeth/screens/InicioPage.dart';
 import 'package:denteeth/screens/DadosContatoPage.dart';
 import 'package:denteeth/screens/ListaAprovados.dart';
@@ -41,7 +43,9 @@ class MyApp extends StatelessWidget {
             const DadosContatoPage(title: 'Insira as informações de contato'),
         '/lista_aprovados': (context) =>
             const ListaAprovados(title: 'Escolha um dos dentistas'),
-        '/camera_boca': (context) => TakePictureScreen(camera: camera),
+        '/camera_boca': (context) => CameraBoca(camera: camera),
+        '/camera_documento': (context) => CameraDocumento(camera: camera),
+        '/camera_crianca': (context) => CameraCrianca(camera: camera),
         '/telefone': (context) => const Telefone(title: 'Telefone'),
       },
     );

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:denteeth/screens/CameraBoca.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -13,12 +14,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'ListaAprovados.dart';
 
 var uuid = const Uuid();
-
-class ScreenArguments {
-  final String image;
-
-  ScreenArguments(this.image);
-}
 
 class DadosContatoPage extends StatefulWidget {
   const DadosContatoPage({super.key, required this.title});
@@ -35,19 +30,28 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
   String _motivo = "";
   bool enviandoDados = false;
 
-  Future<String> pedirsocorro(String imagePath) async {
+  Future<String> pedirsocorro(List<String> imagePath) async {
     if (_motivo.isEmpty) {
       _motivo = "Motivo não informado";
     }
 
-    File imageFile = File(imagePath);
+    File imageFileBoca = File(imagePath[0]);
+    File imageFileDocumento = File(imagePath[0]);
+    File imageFileCrianca = File(imagePath[0]);
 
     final storageRef = FirebaseStorage.instance.ref('emergencias');
-    final mountainsRef = storageRef.child('${uuid.v1()}-foto-boca');
 
-    await mountainsRef.putFile(imageFile);
+    final foto1Ref = storageRef.child('${uuid.v1()}-foto-boca');
+    final foto2Ref = storageRef.child('${uuid.v1()}-foto-documento');
+    final foto3Ref = storageRef.child('${uuid.v1()}-foto-crianca');
 
-    String imageUrl = await mountainsRef.getDownloadURL();
+    await foto1Ref.putFile(imageFileBoca);
+    await foto2Ref.putFile(imageFileDocumento);
+    await foto3Ref.putFile(imageFileCrianca);
+
+    String imageUrlBoca = await foto1Ref.getDownloadURL();
+    String imageUrlDocumento = await foto2Ref.getDownloadURL();
+    String imageUrlCrianca = await foto3Ref.getDownloadURL();
 
     final result =
         await FirebaseFunctions.instanceFor(region: 'southamerica-east1')
@@ -56,7 +60,7 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
       "nome": _nome,
       "telefone": _telefone,
       "descricao": _motivo,
-      "fotos": imageUrl,
+      "fotos": [imageUrlBoca, imageUrlDocumento, imageUrlCrianca],
     });
 
     String response = result.data as String;
@@ -68,10 +72,12 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    final args = ModalRoute.of(context)!.settings.arguments as CameraArgs;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title, style: GoogleFonts.pacifico()),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
           child: Padding(
@@ -155,7 +161,7 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
                         setState(() {
                           enviandoDados = true;
                         });
-                        pedirsocorro(args.image).then((value) => {
+                        pedirsocorro(args.imagesPath).then((value) => {
                               Navigator.pushNamed(context, '/lista_aprovados',
                                   arguments: ScreenArgumentsIdEmergencia(value))
                             });
