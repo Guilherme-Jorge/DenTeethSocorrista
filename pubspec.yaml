@@ -23,6 +23,7 @@ dependencies:
   path_provider:
   path:
   google_fonts: ^4.0.4
+  firebase_messaging: ^14.6.2
 
 
 

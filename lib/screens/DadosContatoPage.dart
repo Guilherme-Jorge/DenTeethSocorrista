@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:denteeth/screens/CameraBoca.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -53,6 +54,8 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
     String imageUrlDocumento = await foto2Ref.getDownloadURL();
     String imageUrlCrianca = await foto3Ref.getDownloadURL();
 
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+
     final result =
         await FirebaseFunctions.instanceFor(region: 'southamerica-east1')
             .httpsCallable('enviarEmergencia')
@@ -61,6 +64,7 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
       "telefone": _telefone,
       "descricao": _motivo,
       "fotos": [imageUrlBoca, imageUrlDocumento, imageUrlCrianca],
+      "fcmToken": fcmToken,
     });
 
     String response = result.data as String;
