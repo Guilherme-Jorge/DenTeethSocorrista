@@ -42,9 +42,11 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
 
     final storageRef = FirebaseStorage.instance.ref('emergencias');
 
-    final foto1Ref = storageRef.child('${uuid.v1()}-foto-boca');
-    final foto2Ref = storageRef.child('${uuid.v1()}-foto-documento');
-    final foto3Ref = storageRef.child('${uuid.v1()}-foto-crianca');
+    final uuID = uuid.v1();
+
+    final foto1Ref = storageRef.child('$uuID-foto-boca');
+    final foto2Ref = storageRef.child('$uuID-foto-documento');
+    final foto3Ref = storageRef.child('$uuID-foto-crianca');
 
     await foto1Ref.putFile(imageFileBoca);
     await foto2Ref.putFile(imageFileDocumento);
