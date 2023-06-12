@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class InicioPage extends StatefulWidget {
   const InicioPage({super.key, required this.title});
@@ -31,8 +33,9 @@ class _InicioPageState extends State<InicioPage> {
                         (states) => Colors.blueAccent),
                     padding: MaterialStateProperty.all(
                         const EdgeInsets.fromLTRB(0, 6, 0, 6))),
+
                 onPressed: () {
-                  Navigator.pushNamed(context, '/camera_boca');
+                  internet_conexao();;
                 },
                 child: Text('Emergência',
                     style: GoogleFonts.pacifico(
@@ -50,5 +53,16 @@ class _InicioPageState extends State<InicioPage> {
         ]),
       )),
     );
+  }
+  void internet_conexao() async {
+    var conexao_resultado = await (Connectivity().checkConnectivity());
+    if (conexao_resultado == ConnectivityResult.none) {
+      Fluttertoast.showToast(
+        msg: 'Sem conexão com a internet',
+        toastLength: Toast.LENGTH_SHORT,
+      );
+    } else {
+      Navigator.pushNamed(context, '/camera_boca');
+    }
   }
 }
