@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,6 +14,17 @@ class InicioPage extends StatefulWidget {
 class _InicioPageState extends State<InicioPage> {
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+
+      Navigator.pushNamed(context, '/avaliacao');
+
+      if (message.notification != null) {
+        print(
+            'Message also contained a notification: ${message.notification?.title}');
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title, style: GoogleFonts.pacifico()),
