@@ -1,9 +1,11 @@
+import 'package:denteeth/screens/AvaliarAtendimento.dart';
 import 'package:denteeth/screens/CameraBoca.dart';
 import 'package:denteeth/screens/CameraCrianca.dart';
 import 'package:denteeth/screens/CameraDocumento.dart';
 import 'package:denteeth/screens/InicioPage.dart';
 import 'package:denteeth/screens/DadosContatoPage.dart';
 import 'package:denteeth/screens/ListaAprovados.dart';
+import 'package:denteeth/screens/ReavaliarAtendimento.dart';
 import 'package:denteeth/screens/Telefone.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,6 +49,8 @@ class MyApp extends StatelessWidget {
         '/camera_documento': (context) => CameraDocumento(camera: camera),
         '/camera_crianca': (context) => CameraCrianca(camera: camera),
         '/telefone': (context) => const Telefone(title: 'Telefone'),
+        '/Avaliacao': (context) => const AvaliarAtendimento(title: 'Avaliacao'),
+        '/Reavaliacao': (context) => const ReavaliarAtendimento(title: 'Reavaliacao'),
       },
     );
   }
