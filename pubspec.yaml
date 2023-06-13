@@ -32,6 +32,14 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: 'images/icon.png'
+  adaptive_icon_background: 'images/icon.png'
+  adaptive_icon_foreground: 'images/icon.png'
 
 flutter:
 
