@@ -9,11 +9,9 @@ import 'package:denteeth/screens/ReavaliarAtendimento.dart';
 import 'package:denteeth/screens/Telefone.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:path/path.dart';
 import 'firebase_options.dart';
 
 @pragma('vm:entry-point')
@@ -37,6 +35,7 @@ void main() async {
   runApp(MyApp(camera: firstCamera));
 
   final fcmToken = await FirebaseMessaging.instance.getToken();
+
   debugPrint(fcmToken);
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;

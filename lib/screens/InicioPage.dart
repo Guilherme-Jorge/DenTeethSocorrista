@@ -14,6 +14,9 @@ class InicioPage extends StatefulWidget {
 class _InicioPageState extends State<InicioPage> {
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      Navigator.pushNamed(context, '/avaliacao');
+    });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
@@ -23,6 +26,13 @@ class _InicioPageState extends State<InicioPage> {
       if (message.notification != null) {
         print(
             'Message also contained a notification: ${message.notification?.title}');
+      }
+    });
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        Navigator.pushNamed(context, '/avaliacao');
       }
     });
     return Scaffold(
