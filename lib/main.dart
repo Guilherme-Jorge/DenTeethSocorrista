@@ -6,6 +6,7 @@ import 'package:denteeth/screens/InicioPage.dart';
 import 'package:denteeth/screens/DadosContatoPage.dart';
 import 'package:denteeth/screens/ListaAprovados.dart';
 import 'package:denteeth/screens/Mapa.dart';
+import 'package:denteeth/screens/NotificacaoDesabilitada.dart';
 import 'package:denteeth/screens/ReavaliarAtendimento.dart';
 import 'package:denteeth/screens/Telefone.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -89,6 +90,7 @@ class MyApp extends StatelessWidget {
         '/reavaliacao': (context) =>
             const ReavaliarAtendimento(title: 'Reavaliar Atendimento'),
         '/mapa': (context) => const Mapa(title: 'Localização do Atendimento'),
+        '/notificacao': (context) => const NotificacaoDesabilitada(title: 'Notificacao Desabilitada'),
       },
     );
   }
