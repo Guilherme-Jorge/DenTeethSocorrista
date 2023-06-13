@@ -5,6 +5,7 @@ import 'package:denteeth/screens/CameraDocumento.dart';
 import 'package:denteeth/screens/InicioPage.dart';
 import 'package:denteeth/screens/DadosContatoPage.dart';
 import 'package:denteeth/screens/ListaAprovados.dart';
+import 'package:denteeth/screens/Mapa.dart';
 import 'package:denteeth/screens/ReavaliarAtendimento.dart';
 import 'package:denteeth/screens/Telefone.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:location/location.dart';
 import 'firebase_options.dart';
 
 @pragma('vm:entry-point')
@@ -50,6 +52,11 @@ void main() async {
     sound: true,
   );
 
+  Location location = Location();
+
+  final permissions = await location.requestPermission();
+  print(await location.getLocation());
+
   print('User granted permission: ${settings.authorizationStatus}');
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -77,9 +84,11 @@ class MyApp extends StatelessWidget {
         '/camera_documento': (context) => CameraDocumento(camera: camera),
         '/camera_crianca': (context) => CameraCrianca(camera: camera),
         '/telefone': (context) => const Telefone(title: 'Telefone'),
-        '/avaliacao': (context) => const AvaliarAtendimento(title: 'Avaliacao'),
+        '/avaliacao': (context) =>
+            const AvaliarAtendimento(title: 'Avaliar Atendimento'),
         '/reavaliacao': (context) =>
-            const ReavaliarAtendimento(title: 'Reavaliacao'),
+            const ReavaliarAtendimento(title: 'Reavaliar Atendimento'),
+        '/mapa': (context) => const Mapa(title: 'Localização do Atendimento'),
       },
     );
   }

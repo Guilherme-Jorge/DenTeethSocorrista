@@ -24,6 +24,8 @@ dependencies:
   path:
   google_fonts: ^4.0.4
   firebase_messaging: ^14.6.2
+  google_maps_flutter: ^2.3.0
+  location: ^4.4.0
 
 
 
