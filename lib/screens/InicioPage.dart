@@ -2,6 +2,15 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+class MapaArgs {
+  final String titulo;
+  final String endereco;
+  final double lat;
+  final double lng;
+
+  MapaArgs(this.titulo, this.endereco, this.lat, this.lng);
+}
+
 class InicioPage extends StatefulWidget {
   const InicioPage({super.key, required this.title});
 
@@ -14,25 +23,54 @@ class InicioPage extends StatefulWidget {
 class _InicioPageState extends State<InicioPage> {
   @override
   Widget build(BuildContext context) {
+    // Mensagem com o app em segudo plano
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      Navigator.pushNamed(context, '/avaliacao');
-    });
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
+      if (message.data['type'] == 'avaliacao') {
+        Navigator.pushNamed(context, '/avaliacao');
+      }
 
-      Navigator.pushNamed(context, '/avaliacao');
-
-      if (message.notification != null) {
-        print(
-            'Message also contained a notification: ${message.notification?.title}');
+      if (message.data['type'] == 'mapa') {
+        Navigator.pushNamed(context, '/mapa',
+            arguments: MapaArgs(
+                message.data['titulo'],
+                message.data['endereco'],
+                double.parse(message.data['lat']),
+                double.parse(message.data['lng'])));
       }
     });
+    // Mensagem com o app aberto
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print(message.data);
+      if (message.data['type'] == 'avaliacao') {
+        Navigator.pushNamed(context, '/avaliacao');
+      }
+
+      if (message.data['type'] == 'mapa') {
+        Navigator.pushNamed(context, '/mapa',
+            arguments: MapaArgs(
+                message.data['titulo'],
+                message.data['endereco'],
+                double.parse(message.data['lat']),
+                double.parse(message.data['lng'])));
+      }
+    });
+    // Mensagem quando o esta fechado
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? message) {
       if (message != null) {
-        Navigator.pushNamed(context, '/avaliacao');
+        if (message.data['type'] == 'avaliacao') {
+          Navigator.pushNamed(context, '/avaliacao');
+        }
+
+        if (message.data['type'] == 'mapa') {
+          Navigator.pushNamed(context, '/mapa',
+              arguments: MapaArgs(
+                  message.data['titulo'],
+                  message.data['endereco'],
+                  double.parse(message.data['lat']),
+                  double.parse(message.data['lng'])));
+        }
       }
     });
     return Scaffold(

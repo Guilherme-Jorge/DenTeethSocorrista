@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-
+import 'package:google_fonts/google_fonts.dart';
 
 class ScreenArguments {
   final String avaliacao;
@@ -8,21 +7,22 @@ class ScreenArguments {
   ScreenArguments(this.avaliacao);
 }
 
-
 class AvaliarAtendimento extends StatefulWidget {
   const AvaliarAtendimento({super.key, required this.title});
-  @override
 
   final String title;
 
-  _AvaliarAtendimentoState createState() => _AvaliarAtendimentoState();
+  @override
+  State<AvaliarAtendimento> createState() => _AvaliarAtendimentoState();
 }
 
 class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
   int notaAva = 0;
   int notaApp = 0;
-  TextEditingController _textAvaEditingController = TextEditingController();
-  TextEditingController _textAppEditingController = TextEditingController();
+  final TextEditingController _textAvaEditingController =
+      TextEditingController();
+  final TextEditingController _textAppEditingController =
+      TextEditingController();
 
   void _setRatingAva(int rating) {
     setState(() {
@@ -40,7 +40,6 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
     String txtAva = _textAvaEditingController.text;
     String txtApp = _textAppEditingController.text;
 
-
     print('Avaliação Atendimento: $notaAva - $txtAva');
     print('Avaliação DenTeeth: $notaApp - $txtApp');
   }
@@ -49,19 +48,19 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Avaliar Atendimento'),
+        title: Text(widget.title, style: GoogleFonts.pacifico()),
       ),
       body: Center(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Como você avaliaria o atendimento?',
-                style: TextStyle (fontSize: 18),
+                style: TextStyle(fontSize: 18),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -76,21 +75,21 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
                     ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Escreva uma avaliação sobre o atendimento",
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   ConstrainedBox(
                     constraints: BoxConstraints(
                       maxHeight: MediaQuery.of(context).size.height * 0.3,
                     ),
                     child: TextField(
                       controller: _textAvaEditingController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Digite aqui:",
                         border: OutlineInputBorder(),
                       ),
@@ -100,12 +99,12 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Como você avaliaria o DenTeeth?',
                 style: TextStyle(fontSize: 18),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -120,21 +119,21 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
                     ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Escreva uma avaliação sobre o DenTeeth",
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   ConstrainedBox(
                     constraints: BoxConstraints(
                       maxHeight: MediaQuery.of(context).size.height * 0.3,
                     ),
                     child: TextField(
                       controller: _textAppEditingController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Digite aqui:",
                         border: OutlineInputBorder(),
                       ),
@@ -144,23 +143,22 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
-                constraints: BoxConstraints(minWidth: 1000),
+                constraints: const BoxConstraints(minWidth: 1000),
                 child: ElevatedButton(
                   onPressed: _submitAvaliacao,
-                  child: Text('Finalizar'),
+                  child: const Text('Finalizar'),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
-                constraints: BoxConstraints(minWidth: 1000),
+                constraints: const BoxConstraints(minWidth: 1000),
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/');
-                  },
-                  child: Text('Cancelar')
-                ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/');
+                    },
+                    child: const Text('Cancelar')),
               ),
             ],
           ),
