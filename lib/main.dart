@@ -55,7 +55,6 @@ void main() async {
   Location location = Location();
 
   final permissions = await location.requestPermission();
-  print(await location.getLocation());
 
   print('User granted permission: ${settings.authorizationStatus}');
 

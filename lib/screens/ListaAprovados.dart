@@ -149,7 +149,10 @@ class _ListaAprovadosState extends State<ListaAprovados> {
 
                                       Navigator.pushNamed(context, '/telefone',
                                           arguments: ScreenArgumentsTelefone(
-                                              data['telefone']));
+                                              data['nome'],
+                                              "Localização de ${data['nome']}",
+                                              "Vá até o endereço",
+                                              data['profissional']));
                                     },
                                     child: const Text(
                                       'Aceitar',

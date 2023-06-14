@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:denteeth/screens/CameraBoca.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -37,8 +35,8 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
     }
 
     File imageFileBoca = File(imagePath[0]);
-    File imageFileDocumento = File(imagePath[0]);
-    File imageFileCrianca = File(imagePath[0]);
+    File imageFileDocumento = File(imagePath[1]);
+    File imageFileCrianca = File(imagePath[2]);
 
     final storageRef = FirebaseStorage.instance.ref('emergencias');
 
