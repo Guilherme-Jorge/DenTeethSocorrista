@@ -27,6 +27,8 @@ dependencies:
   google_maps_flutter: ^2.3.0
   location: ^4.4.0
   app_settings: ^4.2.0
+  fluttertoast: ^8.2.2
+  connectivity_plus: ^4.0.1
 
 
 
