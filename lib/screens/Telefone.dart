@@ -23,23 +23,26 @@ class Telefone extends StatefulWidget {
 }
 
 class _Telefone extends State<Telefone> {
-  Future<String> enviarLocalizacao(
+  bool botaoDesabilitado = false;
+
+  Future<void> enviarLocalizacao(
       String profissional, String titulo, String endereco) async {
     Location location = Location();
     final localizacao = await location.getLocation();
-    final result =
-        await FirebaseFunctions.instanceFor(region: 'southamerica-east1')
-            .httpsCallable('EnviarDadosMapa')
-            .call({
-      "app": "socorrista",
-      "profissional": profissional,
-      "titulo": titulo,
-      "endereco": endereco,
-      "lat": localizacao.latitude,
-      "lng": localizacao.longitude,
-    });
-
-    return result as String;
+    try {
+      FirebaseFunctions.instanceFor(region: 'southamerica-east1')
+          .httpsCallable('enviarDadosMapa')
+          .call({
+        "app": "socorrista",
+        "profissional": profissional,
+        "titulo": titulo,
+        "endereco": endereco,
+        "lat": localizacao.latitude.toString(),
+        "lng": localizacao.longitude.toString(),
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -91,14 +94,22 @@ class _Telefone extends State<Telefone> {
                 width: double.infinity,
                 child: ElevatedButton(
                     style: ButtonStyle(
+                        backgroundColor: botaoDesabilitado
+                            ? MaterialStateProperty.all(Colors.black38)
+                            : MaterialStateProperty.all(Colors.blue),
                         padding: MaterialStateProperty.all(
                             const EdgeInsets.fromLTRB(46, 12, 46, 12))),
                     onPressed: () {
-                      enviarLocalizacao(
-                        args.profissional,
-                        args.titulo,
-                        args.endereco,
-                      );
+                      if (!botaoDesabilitado) {
+                        setState(() {
+                          botaoDesabilitado = true;
+                        });
+                        enviarLocalizacao(
+                          args.profissional,
+                          args.titulo,
+                          args.endereco,
+                        );
+                      }
                     },
                     child: Text(
                       'Enviar minha localização',
