@@ -21,10 +21,7 @@ class InicioPage extends StatefulWidget {
 
   @override
   State<InicioPage> createState() => _InicioPageState();
-
 }
-
-
 
 class _InicioPageState extends State<InicioPage> {
   @override
@@ -99,22 +96,18 @@ class _InicioPageState extends State<InicioPage> {
       return settings;
     }
 
+    Future<ConnectivityResult> checharInternet() async {
+      var resultado = await (Connectivity().checkConnectivity());
+
+      return resultado;
+    }
+
     pedirPermissaoNotificacoes().then((settings) => {
           if (settings.authorizationStatus == AuthorizationStatus.denied ||
               settings.authorizationStatus == AuthorizationStatus.notDetermined)
             {Navigator.pushNamed(context, '/notificacao')}
         });
-    void internet_conexao() async {
-      var conexao_resultado = await (Connectivity().checkConnectivity());
-      if (conexao_resultado == ConnectivityResult.none) {
-        Fluttertoast.showToast(
-          msg: 'Sem conexão com a internet',
-          toastLength: Toast.LENGTH_SHORT,
-        );
-      } else {
-        Navigator.pushNamed(context, '/camera_boca');
-      }
-    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title, style: GoogleFonts.pacifico()),
@@ -134,7 +127,17 @@ class _InicioPageState extends State<InicioPage> {
                     padding: MaterialStateProperty.all(
                         const EdgeInsets.fromLTRB(0, 6, 0, 6))),
                 onPressed: () {
-                  internet_conexao();
+                  checharInternet().then((result) => {
+                        if (result == ConnectivityResult.none)
+                          {
+                            Fluttertoast.showToast(
+                              msg: 'Sem conexão com a internet',
+                              toastLength: Toast.LENGTH_SHORT,
+                            )
+                          }
+                        else
+                          {Navigator.pushNamed(context, '/camera_boca')}
+                      });
                 },
                 child: Text('Emergência',
                     style: GoogleFonts.pacifico(
@@ -152,6 +155,5 @@ class _InicioPageState extends State<InicioPage> {
         ]),
       )),
     );
-
   }
 }
