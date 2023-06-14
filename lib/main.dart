@@ -41,23 +41,9 @@ void main() async {
 
   debugPrint(fcmToken);
 
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
   Location location = Location();
 
-  final permissions = await location.requestPermission();
-
-  print('User granted permission: ${settings.authorizationStatus}');
+  await location.requestPermission();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 }
@@ -89,7 +75,8 @@ class MyApp extends StatelessWidget {
         '/reavaliacao': (context) =>
             const ReavaliarAtendimento(title: 'Reavaliar Atendimento'),
         '/mapa': (context) => const Mapa(title: 'Localização do Atendimento'),
-        '/notificacao': (context) => const NotificacaoDesabilitada(title: 'Notificacao Desabilitada'),
+        '/notificacao': (context) =>
+            const NotificacaoDesabilitada(title: 'Notificacao Desabilitada'),
       },
     );
   }

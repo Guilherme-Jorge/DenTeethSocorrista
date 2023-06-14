@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -36,12 +37,25 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
     });
   }
 
-  void _submitAvaliacao() {
+  Future<bool> _submitAvaliacao() async {
     String txtAva = _textAvaEditingController.text;
     String txtApp = _textAppEditingController.text;
 
-    print('Avaliação Atendimento: $notaAva - $txtAva');
-    print('Avaliação DenTeeth: $notaApp - $txtApp');
+    if (txtAva == "" || txtApp == "") {
+      return false;
+    }
+
+    await FirebaseFunctions.instanceFor(region: 'southamerica-east1')
+        .httpsCallable('enviarAvaliacao')
+        .call({
+      "notaAvaliacao": notaAva,
+      "textoAvaliacao": txtAva,
+      "notaApp": notaApp,
+      "textoApp": txtApp,
+      "profissional": "aqui tera o id do profissional",
+    });
+
+    return true;
   }
 
   @override
@@ -49,39 +63,45 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title, style: GoogleFonts.pacifico()),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Como você avaliaria o atendimento?',
-                style: TextStyle(fontSize: 18),
-              ),
+              const SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    'Como você avaliaria o atendimento?',
+                    style: TextStyle(fontSize: 18),
+                    textAlign: TextAlign.left,
+                  )),
               const SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   for (int i = 1; i <= 5; i++)
                     GestureDetector(
                       onTap: () => _setRatingAva(i),
                       child: Icon(
                         i <= notaAva ? Icons.star : Icons.star_border,
-                        size: 40,
-                        color: Colors.black,
+                        size: 50,
+                        color: i <= notaAva ? Colors.black : Colors.black45,
                       ),
                     ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Escreva uma avaliação sobre o atendimento",
-                  ),
+                  SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        "Avalie o atendimento",
+                        style: GoogleFonts.inter(fontSize: 18),
+                      )),
                   const SizedBox(height: 10),
                   ConstrainedBox(
                     constraints: BoxConstraints(
@@ -100,32 +120,37 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Como você avaliaria o DenTeeth?',
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(height: 20),
+              SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    'Como você avaliaria o DenTeeth?',
+                    style: GoogleFonts.inter(fontSize: 18),
+                  )),
+              const SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   for (int i = 1; i <= 5; i++)
                     GestureDetector(
                       onTap: () => _setRatingApp(i),
                       child: Icon(
                         i <= notaApp ? Icons.star : Icons.star_border,
-                        size: 40,
-                        color: Colors.black,
+                        size: 50,
+                        color: i <= notaApp ? Colors.black : Colors.black45,
                       ),
                     ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Escreva uma avaliação sobre o DenTeeth",
-                  ),
+                  SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        "Escreva o que achou do app",
+                        style: GoogleFonts.inter(fontSize: 18),
+                      )),
                   const SizedBox(height: 10),
                   ConstrainedBox(
                     constraints: BoxConstraints(
@@ -143,22 +168,36 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              Container(
-                constraints: const BoxConstraints(minWidth: 1000),
+              const SizedBox(height: 40),
+              SizedBox(
+                width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _submitAvaliacao,
-                  child: const Text('Finalizar'),
-                ),
+                    style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.fromLTRB(46, 12, 46, 12))),
+                    onPressed: () {
+                      _submitAvaliacao().then((value) => {
+                            if (value) {Navigator.pop(context)}
+                          });
+                    },
+                    child: Text(
+                      'Enviar avaliação',
+                      style: GoogleFonts.inter(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    )),
               ),
               const SizedBox(height: 10),
-              Container(
-                constraints: const BoxConstraints(minWidth: 1000),
-                child: ElevatedButton(
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/');
+                      Navigator.pop(context);
                     },
-                    child: const Text('Cancelar')),
+                    child: Text(
+                      'Não quero avaliar',
+                      style: GoogleFonts.inter(
+                          fontSize: 18, color: Colors.black38),
+                    )),
               ),
             ],
           ),
