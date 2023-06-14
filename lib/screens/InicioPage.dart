@@ -73,6 +73,27 @@ class _InicioPageState extends State<InicioPage> {
         }
       }
     });
+    Future<NotificationSettings> pedirPermissaoNotificacoes() async {
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+      NotificationSettings settings = await messaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+
+      return settings;
+    }
+
+    pedirPermissaoNotificacoes().then((settings) => {
+          if (settings.authorizationStatus == AuthorizationStatus.denied ||
+              settings.authorizationStatus == AuthorizationStatus.notDetermined)
+            {Navigator.pushNamed(context, '/notificacao')}
+        });
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title, style: GoogleFonts.pacifico()),

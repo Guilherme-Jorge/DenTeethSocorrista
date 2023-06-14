@@ -156,7 +156,7 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
                 constraints: const BoxConstraints(minWidth: 1000),
                 child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/');
+                      Navigator.pop(context);
                     },
                     child: const Text('Cancelar')),
               ),
