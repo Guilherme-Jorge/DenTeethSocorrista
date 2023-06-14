@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:denteeth/screens/Telefone.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,6 +21,20 @@ class ListaAprovados extends StatefulWidget {
 }
 
 class _ListaAprovadosState extends State<ListaAprovados> {
+  // Notificar o Denstista
+  Future<bool> notificarUsuario(String profissional, String telefone) async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    await FirebaseFunctions.instanceFor(region: 'southamerica-east1')
+        .httpsCallable('notificarProfissional')
+        .call({
+      "profissional": profissional,
+      "telefone": telefone,
+      "fcmToken": fcmToken
+    });
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments
@@ -139,21 +153,21 @@ class _ListaAprovadosState extends State<ListaAprovados> {
                                               horizontal: 10.0, vertical: 2.0)),
                                     ),
                                     onPressed: () {
-                                      FirebaseFunctions.instanceFor(
-                                              region: 'southamerica-east1')
-                                          .httpsCallable(
-                                              'notificarProfissional')
-                                          .call({
-                                        "profissional": data['profissional'],
-                                        "telefone": data['telefone'],
-                                      });
-
-                                      Navigator.pushNamed(context, '/telefone',
-                                          arguments: ScreenArgumentsTelefone(
-                                              data['nome'],
-                                              "Localização de ${data['nome']}",
-                                              "Vá até o endereço",
-                                              data['profissional']));
+                                      notificarUsuario(data['profissional'],
+                                              data['telefone'])
+                                          .then((value) => {
+                                                if (value)
+                                                  {
+                                                    Navigator.pushNamed(
+                                                        context, '/telefone',
+                                                        arguments: ScreenArgumentsTelefone(
+                                                            data['nome'],
+                                                            "Localização de ${data['nome']}",
+                                                            "Vá até o endereço",
+                                                            data[
+                                                                'profissional']))
+                                                  }
+                                              });
                                     },
                                     child: const Text(
                                       'Aceitar',

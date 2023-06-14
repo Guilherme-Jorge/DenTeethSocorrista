@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:location/location.dart';
 
 class MapaArgs {
   final String titulo;
@@ -85,6 +86,10 @@ class _InicioPageState extends State<InicioPage> {
         provisional: false,
         sound: true,
       );
+
+      Location location = Location();
+
+      await location.requestPermission();
 
       return settings;
     }

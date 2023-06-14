@@ -1,4 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -52,6 +53,7 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
       "textoAvaliacao": txtAva,
       "notaApp": notaApp,
       "textoApp": txtApp,
+      "fcmToken": await FirebaseMessaging.instance.getToken(),
       "profissional": "aqui tera o id do profissional",
     });
 

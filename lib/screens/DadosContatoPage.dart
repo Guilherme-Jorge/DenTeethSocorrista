@@ -157,6 +157,9 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
               width: double.infinity,
               child: ElevatedButton(
                   style: ButtonStyle(
+                      backgroundColor: enviandoDados
+                          ? const MaterialStatePropertyAll(Colors.black38)
+                          : const MaterialStatePropertyAll(Colors.blue),
                       padding: MaterialStateProperty.all(
                           const EdgeInsets.fromLTRB(46, 12, 46, 12))),
                   onPressed: () {
