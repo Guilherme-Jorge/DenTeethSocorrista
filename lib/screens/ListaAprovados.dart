@@ -144,7 +144,8 @@ class _ListaAprovadosState extends State<ListaAprovados> {
                                           .httpsCallable(
                                               'notificarProfissional')
                                           .call({
-                                        "profissional": data['profissional']
+                                        "profissional": data['profissional'],
+                                        "telefone": data['telefone'],
                                       });
 
                                       Navigator.pushNamed(context, '/telefone',
