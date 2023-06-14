@@ -37,8 +37,8 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
     }
 
     File imageFileBoca = File(imagePath[0]);
-    File imageFileDocumento = File(imagePath[0]);
-    File imageFileCrianca = File(imagePath[0]);
+    File imageFileDocumento = File(imagePath[1]);
+    File imageFileCrianca = File(imagePath[2]);
 
     final storageRef = FirebaseStorage.instance.ref('emergencias');
 
