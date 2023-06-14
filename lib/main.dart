@@ -14,15 +14,11 @@ import 'package:flutter/material.dart';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:location/location.dart';
 import 'firebase_options.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-
-  print(
-      "Handling a background message: ${message.messageId} | ${message.notification?.title}");
 }
 
 void main() async {
@@ -36,14 +32,6 @@ void main() async {
   final firstCamera = cameras.first;
 
   runApp(MyApp(camera: firstCamera));
-
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-
-  debugPrint(fcmToken);
-
-  Location location = Location();
-
-  await location.requestPermission();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 }
