@@ -140,7 +140,7 @@ class _ReavaliarAtendimentoState extends State<ReavaliarAtendimento> {
                 width: double.infinity,
                 child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.popUntil(context, ModalRoute.withName('/'));
                     },
                     child: Text(
                       'Não quero reavaliar',

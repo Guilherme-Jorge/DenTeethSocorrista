@@ -1,3 +1,4 @@
+import 'package:denteeth/screens/AvaliarAtendimento.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,7 +30,8 @@ class _InicioPageState extends State<InicioPage> {
     // Mensagem com o app em segudo plano
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       if (message.data['type'] == 'avaliacao') {
-        Navigator.pushNamed(context, '/avaliacao');
+        Navigator.pushNamed(context, '/avaliacao',
+            arguments: AvaliacaoArgumnts(message.data['profissional']));
       }
 
       if (message.data['type'] == 'mapa') {
@@ -43,9 +45,9 @@ class _InicioPageState extends State<InicioPage> {
     });
     // Mensagem com o app aberto
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print(message.data);
       if (message.data['type'] == 'avaliacao') {
-        Navigator.pushNamed(context, '/avaliacao');
+        Navigator.pushNamed(context, '/avaliacao',
+            arguments: AvaliacaoArgumnts(message.data['profissional']));
       }
 
       if (message.data['type'] == 'mapa') {
@@ -63,7 +65,8 @@ class _InicioPageState extends State<InicioPage> {
         .then((RemoteMessage? message) {
       if (message != null) {
         if (message.data['type'] == 'avaliacao') {
-          Navigator.pushNamed(context, '/avaliacao');
+          Navigator.pushNamed(context, '/avaliacao',
+              arguments: AvaliacaoArgumnts(message.data['profissional']));
         }
 
         if (message.data['type'] == 'mapa') {

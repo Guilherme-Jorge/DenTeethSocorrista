@@ -31,6 +31,10 @@ void main() async {
   final cameras = await availableCameras();
   final firstCamera = cameras.first;
 
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+
+  print(fcmToken);
+
   runApp(MyApp(camera: firstCamera));
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
