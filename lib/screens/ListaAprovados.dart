@@ -22,13 +22,15 @@ class ListaAprovados extends StatefulWidget {
 
 class _ListaAprovadosState extends State<ListaAprovados> {
   // Notificar o Denstista
-  Future<bool> notificarUsuario(String profissional, String telefone) async {
+  Future<bool> notificarUsuario(
+      String profissional, String telefone, String nome) async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
     await FirebaseFunctions.instanceFor(region: 'southamerica-east1')
         .httpsCallable('notificarProfissional')
         .call({
       "profissional": profissional,
       "telefone": telefone,
+      "nome": nome,
       "fcmToken": fcmToken
     });
 
@@ -154,7 +156,7 @@ class _ListaAprovadosState extends State<ListaAprovados> {
                                     ),
                                     onPressed: () {
                                       notificarUsuario(data['profissional'],
-                                              data['telefone'])
+                                              data['telefone'], data['nome'])
                                           .then((value) => {
                                                 if (value)
                                                   {
