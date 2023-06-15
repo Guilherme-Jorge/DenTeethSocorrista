@@ -3,10 +3,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ScreenArguments {
-  final String avaliacao;
+class AvaliacaoArgumnts {
+  final String profissional;
 
-  ScreenArguments(this.avaliacao);
+  AvaliacaoArgumnts(this.profissional);
 }
 
 class AvaliarAtendimento extends StatefulWidget {
@@ -38,7 +38,7 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
     });
   }
 
-  Future<bool> _submitAvaliacao() async {
+  Future<bool> _submitAvaliacao(String profissional) async {
     String txtAva = _textAvaEditingController.text;
     String txtApp = _textAppEditingController.text;
 
@@ -54,7 +54,7 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
       "notaApp": notaApp,
       "textoApp": txtApp,
       "fcmToken": await FirebaseMessaging.instance.getToken(),
-      "profissional": "aqui tera o id do profissional",
+      "profissional": profissional,
     });
 
     return true;
@@ -62,6 +62,8 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as AvaliacaoArgumnts;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title, style: GoogleFonts.pacifico()),
@@ -178,8 +180,12 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
                         padding: MaterialStateProperty.all(
                             const EdgeInsets.fromLTRB(46, 12, 46, 12))),
                     onPressed: () {
-                      _submitAvaliacao().then((value) => {
-                            if (value) {Navigator.pop(context)}
+                      _submitAvaliacao(args.profissional).then((value) => {
+                            if (value)
+                              {
+                                Navigator.popUntil(
+                                    context, ModalRoute.withName('/'))
+                              }
                           });
                     },
                     child: Text(
@@ -193,7 +199,7 @@ class _AvaliarAtendimentoState extends State<AvaliarAtendimento> {
                 width: double.infinity,
                 child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.popUntil(context, ModalRoute.withName('/'));
                     },
                     child: Text(
                       'Não quero avaliar',
