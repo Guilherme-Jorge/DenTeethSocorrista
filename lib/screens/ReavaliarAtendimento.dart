@@ -1,10 +1,13 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ScreenArguments {
-  final String avaliacao;
+class ReavaliacaoArguments {
+  final String mensagemProf;
+  final String avaliacaoId;
+  final String profissional;
 
-  ScreenArguments(this.avaliacao);
+  ReavaliacaoArguments(this.mensagemProf, this.avaliacaoId, this.profissional);
 }
 
 class ReavaliarAtendimento extends StatefulWidget {
@@ -27,18 +30,28 @@ class _ReavaliarAtendimentoState extends State<ReavaliarAtendimento> {
     });
   }
 
-  Future<bool> _submitAvaliacao() async {
+  Future<bool> _submitAvaliacao(String avaliacaoId) async {
     String txtAva = _textAvaEditingController.text;
 
     if (txtAva == "") {
       return false;
     }
 
+    await FirebaseFunctions.instanceFor(region: 'southamerica-east1')
+        .httpsCallable('enviarAvaliacao')
+        .call({
+      "notaAvaliacao": notaAva,
+      "textoAvaliacao": txtAva,
+      "avaliacaoId": avaliacaoId,
+    });
+
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as ReavaliacaoArguments;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title, style: GoogleFonts.pacifico()),
@@ -65,7 +78,7 @@ class _ReavaliarAtendimentoState extends State<ReavaliarAtendimento> {
                   padding: const EdgeInsets.all(16.0),
                   color: Colors.black12,
                   child: Text(
-                    'blbalblablablalblab',
+                    args.mensagemProf,
                     style: GoogleFonts.inter(fontSize: 14),
                   )),
               const SizedBox(height: 20),
@@ -125,8 +138,12 @@ class _ReavaliarAtendimentoState extends State<ReavaliarAtendimento> {
                         padding: MaterialStateProperty.all(
                             const EdgeInsets.fromLTRB(46, 12, 46, 12))),
                     onPressed: () {
-                      _submitAvaliacao().then((value) => {
-                            if (value) {Navigator.pop(context)}
+                      _submitAvaliacao(args.avaliacaoId).then((value) => {
+                            if (value)
+                              {
+                                Navigator.popUntil(
+                                    context, ModalRoute.withName('/'))
+                              }
                           });
                     },
                     child: Text(
