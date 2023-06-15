@@ -170,7 +170,8 @@ class _DadosContatoPageState extends State<DadosContatoPage> {
                         });
                         pedirsocorro(args.imagesPath).then((value) => {
                               Navigator.pushNamed(context, '/lista_aprovados',
-                                  arguments: ScreenArgumentsIdEmergencia(value))
+                                  arguments: ScreenArgumentsIdEmergencia(
+                                      value, _nome, _telefone))
                             });
                       }
                     } else {

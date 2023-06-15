@@ -7,8 +7,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ScreenArgumentsIdEmergencia {
   final String emergeId;
+  final String nome;
+  final String telefone;
 
-  ScreenArgumentsIdEmergencia(this.emergeId);
+  ScreenArgumentsIdEmergencia(this.emergeId, this.nome, this.telefone);
 }
 
 class ListaAprovados extends StatefulWidget {
@@ -22,13 +24,15 @@ class ListaAprovados extends StatefulWidget {
 
 class _ListaAprovadosState extends State<ListaAprovados> {
   // Notificar o Denstista
-  Future<bool> notificarUsuario(String profissional, String telefone) async {
+  Future<bool> notificarUsuario(
+      String profissional, String telefone, String nome) async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
     await FirebaseFunctions.instanceFor(region: 'southamerica-east1')
         .httpsCallable('notificarProfissional')
         .call({
       "profissional": profissional,
       "telefone": telefone,
+      "nome": nome,
       "fcmToken": fcmToken
     });
 
@@ -154,7 +158,7 @@ class _ListaAprovadosState extends State<ListaAprovados> {
                                     ),
                                     onPressed: () {
                                       notificarUsuario(data['profissional'],
-                                              data['telefone'])
+                                              args.telefone, args.nome)
                                           .then((value) => {
                                                 if (value)
                                                   {

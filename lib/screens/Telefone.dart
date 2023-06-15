@@ -1,4 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:location/location.dart';
@@ -29,6 +30,7 @@ class _Telefone extends State<Telefone> {
       String profissional, String titulo, String endereco) async {
     Location location = Location();
     final localizacao = await location.getLocation();
+    final fcmToken = await FirebaseMessaging.instance.getToken();
     try {
       FirebaseFunctions.instanceFor(region: 'southamerica-east1')
           .httpsCallable('enviarDadosMapa')
@@ -39,6 +41,7 @@ class _Telefone extends State<Telefone> {
         "endereco": endereco,
         "lat": localizacao.latitude.toString(),
         "lng": localizacao.longitude.toString(),
+        "fcmToken": fcmToken
       });
     } catch (e) {
       print(e);

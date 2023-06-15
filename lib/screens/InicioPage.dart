@@ -1,4 +1,5 @@
 import 'package:denteeth/screens/AvaliarAtendimento.dart';
+import 'package:denteeth/screens/ReavaliarAtendimento.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,6 +35,12 @@ class _InicioPageState extends State<InicioPage> {
             arguments: AvaliacaoArgumnts(message.data['profissional']));
       }
 
+      if (message.data['type'] == 'reavaliacao') {
+        Navigator.pushNamed(context, '/reavaliacao',
+            arguments: ReavaliacaoArguments(message.data['mensagemProf'],
+                message.data['avaliacaoId'], message.data['profissional']));
+      }
+
       if (message.data['type'] == 'mapa') {
         Navigator.pushNamed(context, '/mapa',
             arguments: MapaArgs(
@@ -48,6 +55,12 @@ class _InicioPageState extends State<InicioPage> {
       if (message.data['type'] == 'avaliacao') {
         Navigator.pushNamed(context, '/avaliacao',
             arguments: AvaliacaoArgumnts(message.data['profissional']));
+      }
+
+      if (message.data['type'] == 'reavaliacao') {
+        Navigator.pushNamed(context, '/reavaliacao',
+            arguments: ReavaliacaoArguments(message.data['mensagemProf'],
+                message.data['avaliacaoId'], message.data['profissional']));
       }
 
       if (message.data['type'] == 'mapa') {
@@ -67,6 +80,12 @@ class _InicioPageState extends State<InicioPage> {
         if (message.data['type'] == 'avaliacao') {
           Navigator.pushNamed(context, '/avaliacao',
               arguments: AvaliacaoArgumnts(message.data['profissional']));
+        }
+
+        if (message.data['type'] == 'reavaliacao') {
+          Navigator.pushNamed(context, '/reavaliacao',
+              arguments: ReavaliacaoArguments(message.data['mensagemProf'],
+                  message.data['avaliacaoId'], message.data['profissional']));
         }
 
         if (message.data['type'] == 'mapa') {
